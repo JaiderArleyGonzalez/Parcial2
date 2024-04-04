@@ -10,9 +10,14 @@ import java.net.URL;
 public class HttpConnectionExample {
 
     private static final String USER_AGENT = "Mozilla/5.0";
+    private static int rr = 1;
 
     public static String Invoke(String PORT, String path, String query) throws IOException{
         String GET_URL = "http://localhost:";
+        if(rr == 1){
+
+        }
+
         GET_URL = GET_URL + PORT + path + query;
         URL obj = new URL(GET_URL);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
