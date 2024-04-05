@@ -1,57 +1,134 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Service Proxy</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar en Lista</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+        .form-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-container .form-box {
+            width: 48%;
+        }
+        .form-container form {
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+        .form-box {
+            border: 2px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        }
+    </style>
 </head>
 <body>
-<h1>Service Proxy</h1>
+
+<div class="container">
+    <h1 class="text-center">Buscar en Lista</h1>
+    <div class="form-container">
+        <div class="form-box">
+            <form id="linearForm" class="form-inline">
+                <div class="mb-3">
+                    <label for="linearInput" class="form-label">Lista (separada por comas):</label>
+                    <input type="text" class="form-control" id="linearInput" name="list" required>
+                </div>
+                <div class="mb-3">
+                    <label for="linearValue" class="form-label">Valor a buscar:</label>
+                    <input type="text" class="form-control" id="linearValue" name="value" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Buscar (Lineal)</button>
+            </form>
+        </div>
+        <div class="form-box">
+            <form id="binaryForm" class="form-inline">
+                <div class="mb-3">
+                    <label for="binaryInput" class="form-label">Lista (separada por comas):</label>
+                    <input type="text" class="form-control" id="binaryInput" name="list" required>
+                </div>
+                <div class="mb-3">
+                    <label for="binaryValue" class="form-label">Valor a buscar:</label>
+                    <input type="text" class="form-control" id="binaryValue" name="value" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Buscar (Binario)</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="result" class="mt-5">
+        <!-- Aquí se mostrará la tabla de resultados -->
+    </div>
+</div>
 
 
-<h2>Proxy Linear Search Endpoint</h2>
-<form id="linearForm">
-    <label for="linearList">List:</label><br>
-    <input type="text" id="linearList" name="list"><br>
-    <label for="linearValue">Value:</label><br>
-    <input type="text" id="linearValue" name="value"><br><br>
-    <input type="button" value="Submit" onclick="loadLinearSearch()">
-</form>
-<div id="linearrespmsg"></div>
-
-<h2>Proxy Binary Search Endpoint</h2>
-<form id="binaryForm">
-    <label for="binaryList">List:</label><br>
-    <input type="text" id="binaryList" name="list"><br>
-    <label for="binaryValue">Value:</label><br>
-    <input type="text" id="binaryValue" name="value"><br><br>
-    <input type="button" value="Submit" onclick="loadBinarySearch()">
-</form>
-<div id="binaryrespmsg"></div>
-
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 <script>
-    function loadLinearSearch() {
-        let listVar = document.getElementById("linearList").value;
-        let valueVar = document.getElementById("linearValue").value;
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-            document.getElementById("linearrespmsg").innerHTML = this.responseText;
-        }
-        xhttp.open("GET", "/linearsearch?list="+listVar+"&value="+valueVar);
-        xhttp.send();
-    }
 
-    function loadBinarySearch() {
-        let listVar = document.getElementById("binaryList").value;
-        let valueVar = document.getElementById("binaryValue").value;
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-            document.getElementById("binaryrespmsg").innerHTML = this.responseText;
+    document.getElementById('linearForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+
+        fetch('/linearsearch?' + new URLSearchParams(new FormData(this)))
+            .then(response => response.json())
+            .then(data => {
+
+                displayResults(data);
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+
+    document.getElementById('binaryForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        fetch('/binarysearch?' + new URLSearchParams(new FormData(this)))
+            .then(response => response.json())
+            .then(data => {
+
+                displayResults(data);
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+
+    function displayResults(data) {
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = '';
+
+        if (data) {
+            const table = document.createElement('table');
+            table.classList.add('table');
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Operación</th>
+                        <th>Lista de Entrada</th>
+                        <th>Valor Buscado</th>
+                        <th>Índice Encontrado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${data.operation}</td>
+                        <td>${data.inputlist}</td>
+                        <td>${data.value}</td>
+                        <td>${data.output}</td>
+                    </tr>
+                </tbody>
+            `;
+            resultDiv.appendChild(table);
+        } else {
+            resultDiv.innerHTML = '<p>No se encontraron resultados.</p>';
         }
-        xhttp.open("GET", "/binarysearch?list="+listVar+"&value="+valueVar);
-        xhttp.send();
     }
 </script>
-
 </body>
 </html>

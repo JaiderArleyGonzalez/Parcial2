@@ -1,7 +1,18 @@
 package edu.arep.proxy;
 import static spark.Spark.*;
-public class ServiceProxy {
+
+/**
+ * Esta clase actúa como un proxy para los servicios de búsqueda lineal y búsqueda binaria.
+ * Se comunica con el servicio MathService para realizar las búsquedas.
+ */
+public class ProxyService {
     public static String PORT = "36000";
+
+    /**
+     * Método principal para iniciar el servidor proxy.
+     *
+     * @param args Los argumentos de la línea de comandos.
+     */
     public static void main(String... args){
         port(getPort());
 
@@ -21,6 +32,11 @@ public class ServiceProxy {
         });
     }
 
+    /**
+     * Obtiene el puerto del entorno o utiliza un puerto predeterminado si no está configurado.
+     *
+     * @return El puerto para iniciar el servidor.
+     */
     private static int getPort() {
         if (System.getenv("PORT") != null) {
             return Integer.parseInt(System.getenv("PORT"));
