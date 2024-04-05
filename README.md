@@ -2,6 +2,8 @@
 El proyecto consiste en un conjunto de aplicaciones Java que proporcionan servicios matemáticos, incluyendo búsqueda lineal y búsqueda binaria, a través de endpoints HTTP. Además, cuenta con un proxy que actúa como intermediario para redirigir las solicitudes a los servicios correspondientes.
 ## Funcionamiento
 
+https://github.com/JaiderArleyGonzalez/Parcial2/assets/89174283/a0c84136-bf21-4076-998a-7abe1a1c38c7
+
 ## Prerrequisitos
 
 1. Java Development Kit (JDK) 17: La aplicación está configurada para compilar y ejecutarse en Java 17. Asegúrate de tener JDK 17 instalado en tu sistema.
